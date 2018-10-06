@@ -1,0 +1,48 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class DeathScript : MonoBehaviour {
+
+    public AudioClip DeathSound;
+    AudioSource player;
+    GameObject[] gameObjectArray;
+    // Use this for initialization
+    void Start () {
+        player = GetComponent<AudioSource>();
+
+        gameObjectArray = GameObject.FindGameObjectsWithTag("deathMenu");
+
+        foreach (GameObject i in gameObjectArray)
+        {
+            i.SetActive(false);
+        }
+    }
+	
+	// Update is called once per frame
+	void Update () {
+		
+	}
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        
+        player.PlayOneShot(DeathSound, 0.3F);
+        Renderer rd = gameObject.GetComponent<Renderer>();
+        rd.enabled = false;
+
+        StartCoroutine("Die");
+    }
+
+    IEnumerator Die() {
+        yield return new WaitForSeconds(0.2f);
+
+        foreach (GameObject i in gameObjectArray)
+        {
+            i.SetActive(true);
+        }
+        gameObject.SetActive(false);
+
+ 
+    }
+}
