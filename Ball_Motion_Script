@@ -1,0 +1,49 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class BallMovement : MonoBehaviour {
+
+    public float speed;
+    private Rigidbody rb;
+    public bool reverse;
+    bool changedSpeed;
+    public int counter = 0;
+    public GameObject LeftCoffee;
+    void Start()
+    {
+        rb = GetComponent<Rigidbody>();
+        reverse = false;
+        changedSpeed = false;
+        LeftCoffee.SetActive(false);
+    }
+
+    void FixedUpdate()
+    {
+        if (transform.position.x > 90)
+        {
+            reverse = true;
+            LeftCoffee.SetActive(true);
+            counter++;
+            speed *= -1.3f;
+        }
+
+        if (transform.position.x <= -11)
+        {
+            reverse = false;
+            counter++;
+            speed *= -1.3f;
+
+        }
+
+        if (reverse == false) {
+
+            transform.Translate(Vector3.right * Time.deltaTime * speed);
+        }
+
+        else
+        {
+            transform.Translate(Vector3.right * Time.deltaTime * speed);
+        }
+    }
+}
