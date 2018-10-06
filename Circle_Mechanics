@@ -1,0 +1,125 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class CircleMechanic : MonoBehaviour {
+
+    Vector3 pose;
+    Vector3 target;
+    public bool crouch;
+    SphereCollider sphere;
+    // Use this for initialization
+    void Start()
+    {
+        sphere = transform.GetComponent<SphereCollider>();
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        //Squish ball
+        if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.LeftArrow))
+        {
+            StartCoroutine("Flatten");
+        }
+        //Restore ball to original shape
+        else
+        {
+ 
+        }
+
+        //Ball movement up 
+        if (Input.GetKey(KeyCode.UpArrow))
+        {
+            if (crouch == false)
+            {
+                if (transform.position.y <= 1.11)
+                {
+                    pose = target = transform.position;
+                    pose.y += 2.0f * Time.deltaTime;
+                    transform.position = pose;
+
+                    //Ball wall hit condition
+                    if (transform.position.y > 1.11)
+                    {
+                        pose = target = transform.position;
+                        transform.position = pose;
+                    }
+                }
+            }
+            else //implies crouch = true
+            {
+                if (transform.position.y <= 1.36)
+                {
+                    pose = target = transform.position;
+                    pose.y += 2.0f * Time.deltaTime;
+                    transform.position = pose;
+
+                    //Ball wall hit condition
+                    if (transform.position.y > 1.36)
+                    {
+                        pose = target = transform.position;
+                        transform.position = pose;
+                    }
+                }
+            }
+        }
+        //Ball movement down
+        else if (Input.GetKey(KeyCode.DownArrow))
+        {
+            if (crouch == false)
+            {
+
+                if (transform.position.y >= 0.04)
+                {
+                    pose = target = transform.position;
+                    pose.y -= 2.0f * Time.deltaTime;
+                    transform.position = pose;
+
+                    //Ball wall hit condition
+                    if (transform.position.y < 0.04)
+                    {
+                        pose = target = transform.position;
+                        transform.position = pose;
+                    }
+                }
+            }
+            else //implies crouch = true
+            {
+                if (transform.position.y >= -0.21)
+                {
+                    pose = target = transform.position;
+                    pose.y -= 2.0f * Time.deltaTime;
+                    transform.position = pose;
+
+                    //Ball wall hit condition
+                    if (transform.position.y < -0.21)
+                    {
+                        pose = target = transform.position;
+                        transform.position = pose;
+                    }
+                }
+            }
+        }
+
+
+    }
+
+    IEnumerator Flatten()
+    {
+        crouch = true;
+        while (transform.localScale.y > 0.5)
+        {
+            transform.localScale += new Vector3(0, -0.5f, -0.5f);
+            sphere.radius = 0.1f;
+        }
+        yield return new WaitForSeconds(0.8f);
+
+        crouch = false;
+        while (transform.localScale.y < 1)
+        {
+            transform.localScale += new Vector3(0, 0.5f, 0.5f);
+            sphere.radius = 0.45f;
+        }
+    }
+}
